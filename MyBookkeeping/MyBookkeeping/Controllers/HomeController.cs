@@ -12,6 +12,12 @@ namespace MyBookkeeping.Controllers
         
         public ActionResult Index()
         {
+            var Types = Enum.GetValues(typeof(BookType));
+            SelectList category = new SelectList(Types);
+            List<SelectListItem> _list = category.ToList();
+            _list.Insert(0, new SelectListItem() { Value = "", Text = "請選擇" });      
+
+            ViewBag.categoryType = new SelectList((IEnumerable<SelectListItem>)_list, "Value", "Text");
             return View();
         }
 
