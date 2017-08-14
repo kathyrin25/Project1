@@ -2,6 +2,8 @@
 
 @{
     Layout = null;
+
+    var index = 0;
 }
 
     <table class="table table-bordered table-hover">
@@ -20,11 +22,11 @@
 
     </tr>
 
-    @{ var index = 1;}
+
     @foreach (var item in Model)
     {
         <tr>
-            <td>@(index)</td>
+            <td>@(++index)</td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
             </td>
@@ -36,7 +38,7 @@
             </td>
 
         </tr>
-        index++;
+        
     }
 
 </table>

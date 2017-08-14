@@ -4,8 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookkeeping -  @ViewBag.Title </title>
-    @Styles.Render("~/Content/css")
+    <title>My Bookkeeping -  @ViewBag.Title </title>    
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
+    <link href="/Content/site.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -31,11 +33,13 @@
         @RenderBody()        
         <hr />
         <footer>
-            <p>&copy; 2017 - <a href="#">SkillTree</a></p>
+            <p>&copy; @DateTime.Now.Year.ToString() - <a href="#">SkillTree</a></p> 
         </footer>
     </div>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    
+    <script src="/Scripts/jquery-1.10.2.js"></script>
+    <script src="/Scripts/bootstrap.js"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

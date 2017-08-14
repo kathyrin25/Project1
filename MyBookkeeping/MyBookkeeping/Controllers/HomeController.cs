@@ -11,13 +11,14 @@ namespace MyBookkeeping.Controllers
     {
         
         public ActionResult Index()
-        {          
-            SelectList category = new SelectList(Enum.GetValues(typeof(BookType)));
-            List<SelectListItem> _list = category.ToList();
-            _list.Insert(0, new SelectListItem() { Value = "", Text = "請選擇" }); 
-
-            ViewData["category"] = new SelectList((IEnumerable<SelectListItem>)_list, "Value", "Text");
+        {            
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(BookkeepingListViewModel PageData)
+        {   
+            return View(PageData);
         }
 
         public ActionResult About()
