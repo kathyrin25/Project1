@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MyBookkeeping.Models.ViewModels.BookkeepingListViewModel>
+
+@{
+    Layout = null;
+
+    var index = 0;
+}
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>#</th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th class="text-right">
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+
+    </tr>
+
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@(++index)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td class="text-right">
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+
+        </tr>
+
+    }
+
+</table>
+

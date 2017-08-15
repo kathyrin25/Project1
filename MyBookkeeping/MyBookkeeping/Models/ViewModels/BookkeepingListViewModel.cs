@@ -8,6 +8,9 @@ namespace MyBookkeeping.Models.ViewModels
 {
     public class BookkeepingListViewModel
     {
+        [Key]
+        public int Id { get; set; }  /*EF規定一定要有Key值, 只好變更view model*/
+
         [DisplayFormat(DataFormatString = "{0:N0}")]
         [Display(Name = "金額")]
         public int Amount { get; set; }

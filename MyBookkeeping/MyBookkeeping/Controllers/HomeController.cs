@@ -52,6 +52,12 @@ namespace MyBookkeeping.Controllers
 
             return View(history);
         }
-        
-    }
+
+        public ActionResult ShowHistory1()
+        {
+            MyBookkeepingContext db = new MyBookkeepingContext();
+            return View(db.BookkeepingListViewModels.ToList());
+        }
+
+        }
 }
