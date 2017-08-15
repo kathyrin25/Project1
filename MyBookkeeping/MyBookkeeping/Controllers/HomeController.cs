@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 
 namespace MyBookkeeping.Controllers
 {
@@ -12,8 +13,9 @@ namespace MyBookkeeping.Controllers
     {
         private BookkeepingDAO dao = new BookkeepingDAO();
 
-        public ActionResult Index()
-        {            
+        public ActionResult Index(int Page = 1)
+        {
+            ViewData["CurrentPage"] = Page;
             return View();
         }
 
@@ -53,11 +55,18 @@ namespace MyBookkeeping.Controllers
             return View(history);
         }
 
-        public ActionResult ShowHistory1()
+        public ActionResult ShowHistory1(int Page = 1)
         {
+            //使用 PagedList.Mvc 加上分頁
+            int pageSize = 10;
+
             MyBookkeepingContext db = new MyBookkeepingContext();
-            return View(db.BookkeepingListViewModels.ToList());
+            int currenPage = Page < 1 ? 1 : Page;
+            var BookkeepingList = db.BookkeepingListViewModels.OrderBy(x => x.Date);  /*ToPagedList前必須先OrderBy*/
+            var result = BookkeepingList.ToPagedList(currenPage, pageSize);
+            ViewData["LineIndex"] = ((Page - 1) * pageSize);
+            return View(result);
         }
 
-        }
+   }
 }

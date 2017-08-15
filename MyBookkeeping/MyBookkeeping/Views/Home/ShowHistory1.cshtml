@@ -1,23 +1,30 @@
-﻿@model IEnumerable<MyBookkeeping.Models.ViewModels.BookkeepingListViewModel>
+﻿@using PagedList.Mvc;
+
+@model PagedList.IPagedList<MyBookkeeping.Models.ViewModels.BookkeepingListViewModel>
 
 @{
     Layout = null;
 
     var index = 0;
+
+    if (ViewData["LineIndex"] != null)
+    {
+        index = int.Parse(ViewData["LineIndex"].ToString());
+    }
 }
 
 <table class="table table-bordered table-hover">
     <tr>
         <th>#</th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Type)
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Date)
         </th>
         <th class="text-right">
-            @Html.DisplayNameFor(model => model.Amount)
+            @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)
         </th>
 
     </tr>
@@ -42,4 +49,9 @@
     }
 
 </table>
+
+<div style="color:orange;">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+</div>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 

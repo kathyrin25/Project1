@@ -2,6 +2,13 @@
 
 @{    
     ViewBag.Title = "My Bookkeeping";
+
+    int CurrentPage = 1;
+
+    if (ViewData["CurrentPage"] != null)
+    {
+        CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+    }
 }
 
 <!DOCTYPE html>
@@ -66,7 +73,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                @Html.Action("ShowHistory1")
+                @Html.Action("ShowHistory1", new { Page = @CurrentPage })
             </div>
         </div>
 </body>
