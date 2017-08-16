@@ -12,13 +12,18 @@ using MyBookkeeping.Models.ViewModels;
 namespace MyBookkeeping.Controllers
 {
     public class BookkeepingListViewModelsController : Controller
-    {
-        private MyBookkeepingContext db = new MyBookkeepingContext();
+    {  
+        private readonly MyBookkeepingService _BookkeepingSvc;
+
+        public BookkeepingListViewModelsController()
+        {
+            _BookkeepingSvc = new MyBookkeepingService();
+        }        
 
         // GET: BookkeepingListViewModels
         public ActionResult Index()
         {
-            return View(db.BookkeepingListViewModels.ToList());
+            return View(_BookkeepingSvc.Lookup());
         }
 
         // GET: BookkeepingListViewModels/Details/5
@@ -28,7 +33,9 @@ namespace MyBookkeeping.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BookkeepingListViewModel bookkeepingListViewModel = db.BookkeepingListViewModels.Find(id);
+
+            BookkeepingListViewModel bookkeepingListViewModel = _BookkeepingSvc.GetSingle(id.Value);
+
             if (bookkeepingListViewModel == null)
             {
                 return HttpNotFound();
@@ -51,8 +58,8 @@ namespace MyBookkeeping.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.BookkeepingListViewModels.Add(bookkeepingListViewModel);
-                db.SaveChanges();
+                _BookkeepingSvc.Add(bookkeepingListViewModel);
+                _BookkeepingSvc.Save();                
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +73,7 @@ namespace MyBookkeeping.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BookkeepingListViewModel bookkeepingListViewModel = db.BookkeepingListViewModels.Find(id);
+            BookkeepingListViewModel bookkeepingListViewModel = _BookkeepingSvc.GetSingle(id.Value);
             if (bookkeepingListViewModel == null)
             {
                 return HttpNotFound();
@@ -81,10 +88,11 @@ namespace MyBookkeeping.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Amount,Date,Remark,Type")] BookkeepingListViewModel bookkeepingListViewModel)
         {
-            if (ModelState.IsValid)
+            var oldData = _BookkeepingSvc.GetSingle(bookkeepingListViewModel.Id);
+            if (oldData != null && ModelState.IsValid)
             {
-                db.Entry(bookkeepingListViewModel).State = EntityState.Modified;
-                db.SaveChanges();
+                _BookkeepingSvc.Edit(bookkeepingListViewModel, oldData);
+                _BookkeepingSvc.Save();
                 return RedirectToAction("Index");
             }
             return View(bookkeepingListViewModel);
@@ -97,7 +105,8 @@ namespace MyBookkeeping.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BookkeepingListViewModel bookkeepingListViewModel = db.BookkeepingListViewModels.Find(id);
+
+            BookkeepingListViewModel bookkeepingListViewModel = _BookkeepingSvc.GetSingle(id.Value);
             if (bookkeepingListViewModel == null)
             {
                 return HttpNotFound();
@@ -110,19 +119,14 @@ namespace MyBookkeeping.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            BookkeepingListViewModel bookkeepingListViewModel = db.BookkeepingListViewModels.Find(id);
-            db.BookkeepingListViewModels.Remove(bookkeepingListViewModel);
-            db.SaveChanges();
+            BookkeepingListViewModel bookkeepingListViewModel = _BookkeepingSvc.GetSingle(id);
+            _BookkeepingSvc.Delete(bookkeepingListViewModel);
+            _BookkeepingSvc.Save();
+            //db.BookkeepingListViewModels.Remove(bookkeepingListViewModel);
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        
     }
 }
