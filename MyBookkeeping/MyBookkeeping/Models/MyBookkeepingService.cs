@@ -47,5 +47,11 @@ namespace MyBookkeeping.Models
         {
             _db.SaveChanges();
         }
+
+        public int GetRecordID()
+        {
+            //因為table 設計不好, id 是自動增加, 只好以這種方式取得新增資料的id, 應改成用guid
+            return this.Lookup().OrderByDescending(x => x.Id).FirstOrDefault().Id;
+        }
     }
 }

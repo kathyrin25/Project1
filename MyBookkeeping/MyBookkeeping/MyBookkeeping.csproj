@@ -148,6 +148,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\BookkeepingDAO.cs" />
     <Compile Include="Models\BookkeepingLog.cs" />
+    <Compile Include="Models\BookkeepingLogService.cs" />
     <Compile Include="Models\MyBookkeepingContext.cs" />
     <Compile Include="Models\MyBookkeepingService.cs" />
     <Compile Include="Models\ViewModels\BookkeepingListViewModel.cs" />

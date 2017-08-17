@@ -14,10 +14,12 @@ namespace MyBookkeeping.Controllers
     public class BookkeepingListViewModelsController : Controller
     {  
         private readonly MyBookkeepingService _BookkeepingSvc;
+        private readonly BookkeepingLogService _LogSvc;
 
         public BookkeepingListViewModelsController()
         {
             _BookkeepingSvc = new MyBookkeepingService();
+            _LogSvc = new BookkeepingLogService();
         }        
 
         // GET: BookkeepingListViewModels
@@ -59,7 +61,11 @@ namespace MyBookkeeping.Controllers
             if (ModelState.IsValid)
             {
                 _BookkeepingSvc.Add(bookkeepingListViewModel);
-                _BookkeepingSvc.Save();                
+                _BookkeepingSvc.Save();
+
+                int recordId = _BookkeepingSvc.GetRecordID();
+                _LogSvc.Add(recordId, "Create");
+                _LogSvc.Save();          
                 return RedirectToAction("Index");
             }
 
@@ -93,6 +99,8 @@ namespace MyBookkeeping.Controllers
             {
                 _BookkeepingSvc.Edit(bookkeepingListViewModel, oldData);
                 _BookkeepingSvc.Save();
+                _LogSvc.Add(bookkeepingListViewModel.Id, "Edit");
+                _LogSvc.Save();
                 return RedirectToAction("Index");
             }
             return View(bookkeepingListViewModel);
@@ -122,8 +130,8 @@ namespace MyBookkeeping.Controllers
             BookkeepingListViewModel bookkeepingListViewModel = _BookkeepingSvc.GetSingle(id);
             _BookkeepingSvc.Delete(bookkeepingListViewModel);
             _BookkeepingSvc.Save();
-            //db.BookkeepingListViewModels.Remove(bookkeepingListViewModel);
-            //db.SaveChanges();
+            _LogSvc.Add(id, "Delete");
+            _LogSvc.Save();
             return RedirectToAction("Index");
         }
 
