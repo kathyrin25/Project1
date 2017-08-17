@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyBookkeeping.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,16 +8,18 @@ namespace MyBookkeeping.Models
 {
     public class BookkeepingLogService
     {
-        private readonly MyBookkeepingContext _db;
+        private readonly IRepository<BookkeepingLog> _logRep;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BookkeepingLogService()
+        public BookkeepingLogService(IUnitOfWork unitOfWork)
         {
-            _db = new MyBookkeepingContext();
+            _unitOfWork = unitOfWork;
+            _logRep = new Repository<BookkeepingLog>(unitOfWork);
         }
 
         public void Add(int RecordId, string Action)
         {
-            _db.BookkeepingLogs.Add(new BookkeepingLog
+            _logRep.Create(new BookkeepingLog
             {
                 BookId = RecordId,
                 Action = Action,
@@ -26,7 +29,7 @@ namespace MyBookkeeping.Models
 
         public void Save()
         {
-            _db.SaveChanges();
+            _unitOfWork.Save();
         }
     }
 }

@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MyBookkeeping.Models.ViewModels;
+using MyBookkeeping.Repositories;
 
 namespace MyBookkeeping.Models
 {
     public class MyBookkeepingService
     {
-        private readonly MyBookkeepingContext _db;
+        private readonly IRepository<BookkeepingListViewModel> _BookkeepingListRep;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MyBookkeepingService()
+        public MyBookkeepingService(IUnitOfWork unitOfWork)
         {
-            _db = new MyBookkeepingContext();
+            _unitOfWork = unitOfWork;
+            _BookkeepingListRep = new Repository<BookkeepingListViewModel>(unitOfWork);
         }
 
         public IEnumerable<BookkeepingListViewModel> Lookup()
         {
-            return (_db.BookkeepingListViewModels.ToList());
+            return _BookkeepingListRep.LookupAll();
         }
 
-        public BookkeepingListViewModel GetSingle(int id)
+        public BookkeepingListViewModel GetSingle(int RecordId)
         {
-            return _db.BookkeepingListViewModels.Find(id);
+            return _BookkeepingListRep.GetSingle(d => d.Id == RecordId);
         }
 
         public void Add(BookkeepingListViewModel bookkeepingList)
         {
-            _db.BookkeepingListViewModels.Add(bookkeepingList);
+            _BookkeepingListRep.Create(bookkeepingList);
         }
 
         public void Edit(BookkeepingListViewModel pageData, BookkeepingListViewModel oldData)
@@ -40,18 +43,18 @@ namespace MyBookkeeping.Models
 
         public void Delete(BookkeepingListViewModel data)
         {
-            _db.BookkeepingListViewModels.Remove(data);
+            _BookkeepingListRep.Remove(data);
         }
 
         public void Save()
         {
-            _db.SaveChanges();
+            _unitOfWork.Save();
         }
 
         public int GetRecordID()
         {
             //因為table 設計不好, id 是自動增加, 只好以這種方式取得新增資料的id, 應改成用guid
-            return this.Lookup().OrderByDescending(x => x.Id).FirstOrDefault().Id;
+            return _BookkeepingListRep.LookupAll().OrderByDescending(x => x.Id).FirstOrDefault().Id;
         }
     }
 }

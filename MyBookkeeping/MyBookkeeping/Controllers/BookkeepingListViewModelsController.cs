@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MyBookkeeping.Models;
 using MyBookkeeping.Models.ViewModels;
+using MyBookkeeping.Repositories;
 
 namespace MyBookkeeping.Controllers
 {
@@ -18,8 +19,9 @@ namespace MyBookkeeping.Controllers
 
         public BookkeepingListViewModelsController()
         {
-            _BookkeepingSvc = new MyBookkeepingService();
-            _LogSvc = new BookkeepingLogService();
+            var unitOfWork = new EFUnitOfWork();
+            _BookkeepingSvc = new MyBookkeepingService(unitOfWork);
+            _LogSvc = new BookkeepingLogService(unitOfWork);
         }        
 
         // GET: BookkeepingListViewModels
