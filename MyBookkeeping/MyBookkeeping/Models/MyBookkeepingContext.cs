@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using MyBookkeeping.Models.ViewModels;
+using MyBookkeeping.Models;
 
 namespace MyBookkeeping.Models
 {
@@ -19,6 +21,8 @@ namespace MyBookkeeping.Models
         {
         }
 
-        public System.Data.Entity.DbSet<MyBookkeeping.Models.ViewModels.BookkeepingListViewModel> BookkeepingListViewModels { get; set; }
+        public System.Data.Entity.DbSet<BookkeepingListViewModel> BookkeepingListViewModels { get; set; }
+        public System.Data.Entity.DbSet<BookkeepingLog> BookkeepingLogs { get; set; }
+
     }
 }
